@@ -1,0 +1,232 @@
+### Dynamic Memory Allocation
+Array can be used for data storage,but  they are fixed in size.The programmer must know the size of the array or data in advance while writing the program,because the size of the array you declared may be insufficient.
+
+To solve this issue, you can allocate memory manually during run-time. This is known as dynamic memory allocation in C programming. 
+
+**Different types of library functions**
+
+There are four different library functions in C for memory management which are defined within header file <stdlib.h> and alloc.h. They are: malloc(), calloc(), realloc() and free().
+
+**1.malloc()**
+
+ The name "malloc" stands for memory allocation.It is used to dynamically allocate a single large block of memory with the specified size. And, it returns a pointer of void which can be casted into pointers of any form.It doesn’t Initialize memory at execution time so that it has initialized each block with the default garbage value initially.
+
+**Syntax of malloc()**
+```
+ptr = (castType*) malloc(size);
+```
+Eg:
+```
+ptr = (float*) malloc(100 * sizeof(float));
+``````
+The above statement allocates 400 bytes of memory. It's because the size of float is 4 bytes. And, the pointer ptr holds the address of the first byte in the allocated memory.
+
+The expression results in a NULL pointer if the memory cannot be allocated.
+
+**2.calloc()**
+
+The name "calloc" stands for contiguous allocation.It is used to dynamically allocate the specified number of blocks of memory of the specified type. It is very much similar to malloc() but has two different points and these are:
+- It initializes each block with a default value ‘0’.
+- It has two parameters or arguments as compare to malloc
+().
+
+**Syntax of calloc()**
+```
+ptr = (castType*)calloc(n, size);
+```
+Eg:
+```
+ptr = (float*) calloc(25, sizeof(float));
+```
+This statement allocates contiguous space in memory for 
+25 elements each with the size of the float.
+
+**3.C free()**
+
+“free” method in C is used to dynamically de-allocate the memory. The memory allocated using functions malloc() and calloc() is not de-allocated on their own. Hence the free() method is used, whenever the dynamic memory allocation takes place. It helps to reduce wastage of memory by freeing it.
+**Syntax of free()**
+```
+free(ptr);
+```
+This statement frees the space allocated in the memory pointed by ptr.
+
+**C realloc()**
+
+The name "realloc” stands for re-allocation. This  is used to dynamically change the memory allocation of a previously allocated memory. In other words, if the memory previously allocated with the help of malloc or calloc is insufficient, realloc can be used to dynamically re-allocate memory. re-allocation of memory maintains the already present value and new blocks will be initialized with the default garbage value.
+
+**Syntax of realloc() **
+```
+ptr = realloc(ptr, newSize);
+```
+where ptr is reallocated with new size 'newSize'. 
+
+**Example.1**
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+
+    // This pointer will hold the base address of the
+block created
+    double* ptr;
+    int n, i;
+
+    // Get the number of elements for the array
+    printf("Enter number of elements:");
+    scanf("%d", &n);
+    printf("Entered number of elements: %d\n", n);
+
+    // Dynamically allocate memory using malloc() for a
+double array
+    ptr = (double*)malloc(n * sizeof(double));
+
+    // Check if the memory has been successfully
+    // allocated by malloc or not
+    if (ptr == NULL) {
+        printf("Memory not allocated.\n");
+        exit(0);
+    }
+    else {
+
+        // Memory has been successfully allocated
+        printf("Memory successfully allocated using 
+malloc.\n");
+
+        // Get the elements of the array
+        for (i = 0; i < n; ++i) {
+            ptr[i] = (i + 1) * 1.5; // Initializing with 
+some values for demonstration
+        }
+
+        // Print the elements of the array
+        printf("The elements of the array are: ");
+        for (i = 0; i < n; ++i) {
+            printf("%.2lf, ", ptr[i]);
+        }
+    }
+
+    // Don't forget to free the allocated memory
+    free(ptr);
+
+    return 0;
+}
+```
+**Example.2**
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+
+    // This pointer will hold the base address of the block created
+    int* ptr;
+    int n, i;
+
+    // Get the number of elements for the array
+    n = 5;
+    printf("Enter number of elements: %d\n", n);
+
+    // Dynamically allocate memory using calloc() for an integer array
+    ptr = (int*)calloc(n, sizeof(int));
+
+    // Check if the memory has been successfully
+    // allocated by calloc or not
+    if (ptr == NULL) {
+        printf("Memory not allocated.\n");
+        exit(0);
+    }
+    else {
+
+        // Memory has been successfully allocated
+        printf("Memory successfully allocated using calloc.\n");
+
+        // Get the elements of the array
+        for (i = 0; i < n; ++i) {
+            ptr[i] = (i + 1) * 2; // Initializing with some values for 
+demonstration
+        }
+
+        // Print the elements of the array
+        printf("The elements of the array are: ");
+        for (i = 0; i < n; ++i) {
+            printf("%d, ", ptr[i]);
+        }
+    }
+
+    // Don't forget to free the allocated memory
+    free(ptr);
+
+    return 0;
+}
+
+```
+**Example.3**
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+
+	// This pointer will hold the
+	// base address of the block created
+	int* ptr;
+	int n, i;
+
+	// Get the number of elements for the array
+	n = 5;
+	printf("Enter number of elements: %d\n", n);
+
+	// Dynamically allocate memory using calloc()
+	ptr = (int*)calloc(n, sizeof(int));
+
+	// Check if the memory has been successfully
+	// allocated by malloc or not
+	if (ptr == NULL) {
+		printf("Memory not allocated.\n");
+		exit(0);
+	}
+	else {
+
+		// Memory has been successfully allocated
+		printf("Memory successfully allocated using calloc.\n");
+
+		// Get the elements of the array
+		for (i = 0; i < n; ++i) {
+			ptr[i] = i + 1;
+		}
+
+		// Print the elements of the array
+		printf("The elements of the array are: ");
+		for (i = 0; i < n; ++i) {
+			printf("%d, ", ptr[i]);
+		}
+
+		// Get the new size for the array
+		n = 10;
+		printf("\n\nEnter the new size of the array: %d\n", n);
+
+		// Dynamically re-allocate memory using realloc()
+		ptr = (int*)realloc(ptr, n * sizeof(int));
+
+		// Memory has been successfully allocated
+		printf("Memory successfully re-allocated using realloc.\n");
+
+		// Get the new elements of the array
+		for (i = 5; i < n; ++i) {
+			ptr[i] = i + 1;
+		}
+
+		// Print the elements of the array
+		printf("The elements of the array are: ");
+		for (i = 0; i < n; ++i) {
+			printf("%d, ", ptr[i]);
+		}
+
+		free(ptr);
+	}
+
+	return 0;
+}
+```
